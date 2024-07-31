@@ -57,7 +57,7 @@ csv_output = False
 while True:
   csv_output = {"csv": True, "xlsx": False}.get(input("Enter the output file type (csv/xlsx): ").lower(), print("Invalid output file type!"))
   if csv_output is not None:
-    continue
+    break
 job_list = get_so_jobs(term) + get_wwr_jobs(term) + get_remo_jobs(term)
 jobs_df = pd.DataFrame(job_list, columns=["title", "company", "url"])
 if csv_output:
