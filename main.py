@@ -23,7 +23,7 @@ def get_wwr_jobs(term):
 
 def get_remo_jobs(term):
   job_list = []
-  url = f"https://remoteok.io/remote-dev+{term}-jobs"
+  url = f"https://remoteok.io/remote-dev+{term.replace(" ", "+")}-jobs"
   html_doc = requests.get(url).text
   soup = BeautifulSoup(html_doc, "html.parser")
   tr_soup = soup.find_all("tr", {"class":"job"})
