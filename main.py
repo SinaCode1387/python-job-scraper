@@ -46,4 +46,4 @@ if csv_output:
   jobs_df.to_csv("jobs.csv", quoting=csv.QUOTE_NONNUMERIC, escapechar="\\", index=False)
 else:
   jobs_df.to_excel("jobs.xlsx",  index=False)
-print(f"Found {len(joblist)} jobs.")
+print(f"Found {len(job_list)} jobs.")
