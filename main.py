@@ -1,6 +1,7 @@
 from bs4 import BeautifulSoup
 import requests
 import csv
+import pandas as pd
 
 def get_wwr_jobs(term):
   job_list = []
