@@ -1,4 +1,3 @@
-from flask import Flask, render_template, request, send_file
 from bs4 import BeautifulSoup
 import requests
 import csv
@@ -53,38 +52,16 @@ def get_remo_jobs(term):
 
   return job_list
 
-
-def write_csv(job_list):
-  with open("jobs.csv", "w") as file:
-    writer = csv.writer(file)
-    for job_info in job_list:
-      writer.writerow(job_info)
-    file.close()
-
-db= {}
-app = Flask("RemoteJobs")
-
-@app.route("/")
-def home():
-  return render_template("home.html")
-
-@app.route("/search")
-def search():
-  global job_list
-  search_key = request.args.get("term").lower()
-  if search_key in db.keys():
-    job_list = db[search_key]
-  else:
-    job_list = get_so_jobs(search_key) + get_wwr_jobs(search_key) + get_remo_jobs(search_key)
-    db[search_key] = job_list
-
-  return render_template("search.html", term=search_key, job_list=job_list, length=len(job_list))
-
-@app.route("/jobs.csv")
-def export_file():
-  write_csv(job_list)
-  return send_file("jobs.csv")
-
-
-
-app.run()
+term = input("Enter the job title: ")
+csv_output = False
+while True:
+  csv_output = {"csv": True, "xlsx": False}.get(input("Enter the output file type (csv/xlsx): ").lower(), print("Invalid output file type!"))
+  if csv_output is not None:
+    continue
+job_list = get_so_jobs(term) + get_wwr_jobs(term) + get_remo_jobs(term)
+jobs_df = pd.DataFrame(job_list, columns=["title", "company", "url"])
+if csv_output:
+  jobs_df.to_csv("jobs.csv", quoting=csv.QUOTE_NONNUMERIC, escapechar="\\", index=False)
+else:
+  jobs_df.to_excel("jobs.xlsx",  index=False)
+print(f"Found {len(joblist)} jobs.")
