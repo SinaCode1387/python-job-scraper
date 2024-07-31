@@ -2,26 +2,6 @@ from bs4 import BeautifulSoup
 import requests
 import csv
 
-def get_so_jobs(term):
-  job_list = []
-  url = f"https://stackoverflow.com/jobs?r=true&q={term}"
-  html_doc = requests.get(url).text
-  soup = BeautifulSoup(html_doc, "html.parser")
-  list_results = soup.find("div", {"class":"listResults"})
-  head_soup = list_results.find_all("h2", {"class":"mb4 fc-black-800 fs-body3"})
-  for head in head_soup:
-    header = head.find("a")
-    link = "https://stackoverflow.com" + header.get("href")
-    title = header.get_text()
-    job_list.append([title, "company_name", link])
-  comp_soup = list_results.find_all("h3", {"class":"fc-black-700 fs-body1 mb4"})
-  for i, company in enumerate(comp_soup):
-    comp_name = company.find("span").text.strip()
-    job_list[i][1] = comp_name
-
-  return job_list
-
-
 def get_wwr_jobs(term):
   job_list = []
   url = f"https://weworkremotely.com/remote-jobs/search?term={term}"
@@ -59,7 +39,7 @@ while True:
   if csv_output is not None:
     break
   print("Invalid output file type!")
-job_list = get_so_jobs(term) + get_wwr_jobs(term) + get_remo_jobs(term)
+job_list = get_wwr_jobs(term) + get_remo_jobs(term)
 jobs_df = pd.DataFrame(job_list, columns=["title", "company", "url"])
 if csv_output:
   jobs_df.to_csv("jobs.csv", quoting=csv.QUOTE_NONNUMERIC, escapechar="\\", index=False)
