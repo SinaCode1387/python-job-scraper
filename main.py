@@ -11,7 +11,7 @@ def get_wwr_jobs(term):
   sections = soup.find_all("section", {"class":"jobs"})
   for section in sections:
     list_soup = section.find("ul")
-    list_item = list_soup.find_all("li")
+    list_item = list_soup.find_all("li", {"class": ""}) + list_soup.find_all("li", {"class": "feature"})
     for info in list_item:
       title = info.find("span", {"class":"title"}).text
       company = info.find("span", {"class":"company"}).text
