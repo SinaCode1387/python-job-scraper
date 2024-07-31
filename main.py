@@ -8,13 +8,15 @@ def get_wwr_jobs(term):
   url = f"https://weworkremotely.com/remote-jobs/search?term={term}"
   html_doc = requests.get(url).text
   soup = BeautifulSoup(html_doc, "html.parser")
-  list_soup = soup.find("ul")
-  list_item = list_soup.find_all("li", {"class":"feature"})
-  for info in list_item:
-    title = info.find("span", {"class":"title"}).text
-    company = info.find("span", {"class":"company"}).text
-    link = "https://weworkremotely.com" + info.find("a").get("href")
-    job_list.append([title, company, link])
+  sections = soup.find_all("section", {"class":"jobs"})
+  for section in sections:
+    list_soup = section_soup.find("ul")
+    list_item = list_soup.find_all("li", {"class":"feature"})
+    for info in list_item:
+      title = info.find("span", {"class":"title"}).text
+      company = info.find("span", {"class":"company"}).text
+      link = "https://weworkremotely.com" + info.find("a").get("href")
+      job_list.append([title, company, link])
   
   return job_list
 
